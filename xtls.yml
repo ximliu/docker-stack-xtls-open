@@ -1,0 +1,29 @@
+version: "3.9"
+services: 
+    xray:
+        image: teddysun/xray:latest
+        volumes: 
+            - ./xray/etc-xray:/etc/xray
+            - ./letsencrypt/etc-letsencrypt:/etc/letsencrypt
+        networks: 
+            - xray-network
+        ports: 
+            - target: 443
+              published: 443
+              mode: host
+    nginx:
+        image: nginx:latest
+        volumes: 
+            - ./nginx/usr-share-nginx-html:/usr/share/nginx/html
+            - ./nginx/etc-nginx-conf.d:/etc/nginx/conf.d
+        networks: 
+            - xray-network
+        depends_on:
+            - xray
+        ports: 
+            - target: 80
+              published: 80
+              mode: host
+    
+networks:
+    xray-network:

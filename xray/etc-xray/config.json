@@ -1,0 +1,49 @@
+{
+    "log": {
+        "loglevel": "info"
+    },
+    "inbounds": [
+        {
+            "port": 443,
+            "protocol": "vless",
+            "settings": {
+                "decryption": "none",
+                "clients": [
+                    {
+                        "id": "你的uuid",
+                        "flow": "xtls-rprx-direct",
+                        "email": "你的备注"
+                    }
+                ],
+                "fallbacks": [
+                    {
+                        "dest": "nginx:444"
+                    }
+                ]
+            },
+            "streamSettings": {
+                "network": "tcp",
+                "security": "xtls",
+                "xtlsSettings": {
+                    "minVersion": "1.3",
+                    "certificates": [
+                        {
+                            "certificateFile": "/etc/letsencrypt/live/域名/fullchain.pem",
+                            "keyFile": "/etc/letsencrypt/live/域名/privkey.pem"
+                        }
+                    ]
+                }
+            }
+        }
+    ],
+    "outbounds": [
+        {
+            "protocol": "freedom",
+            "tag": "direct"
+        },
+        {
+            "protocol": "blackhole",
+            "tag": "baned"
+        }
+    ]
+}
